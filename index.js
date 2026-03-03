@@ -8,7 +8,7 @@ const productRoutes=require('./routes/productRoutes');
 const path = require("path");
 dotenv.config();    
 const app=express();
-const PORT=4000;
+const PORT=process.env.PORT || 4000;
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{console.log("monogdb connected succesfull")})
 .catch((error)=>{console.log(error)})
