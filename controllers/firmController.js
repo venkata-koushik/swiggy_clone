@@ -1,14 +1,15 @@
 const Firm=require('../models/Firm');
 const Vendor=require('../models/Vendor');
 const multer = require('multer');
+const path=require('path');
 
 
 const storage=multer.diskStorage({
-    destination:function(req,res,cb){
+    destination:function(req,file,cb){
         cb(null,'uploads/');
     },
-    filename:function(req,res,cb){
-        cb(null,date,now()+path.extname(file.originalname));
+    filename:function(req,file,cb){
+        cb(null,Date.now()+path.extname(file.originalname));
     }
 });
 const upload=multer({storage:storage});
@@ -41,11 +42,11 @@ const addFirm= async(req,res)=>{
 
 const deleteFirmById = async (req,res)=>{
     try{
-       const frimId=req.params.firmId;
+       const firmId=req.params.firmId;
       
               const deletedFirm=await Firm.findByIdAndDelete(firmId);
             if(!deletedFirm){
-              res.status(404).json({error:"the firm u want to delete is not found"});
+            return  res.status(404).json({error:"the firm u want to delete is not found"});
       
             }
             res.status(200).json({message:"the product u wnat to delete is deleted "});
