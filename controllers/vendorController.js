@@ -12,7 +12,7 @@ const vendorRegister= async(req,res)=>{
    try{
      const vendorEmail= await Vendor.findOne({email});
      if(vendorEmail){
-     return res.status(400).json(`email is succesfully working and correct`);
+     return res.status(400).json({ error: "Email already registered" });
       }
       const hashedPassword=await bcrypt.hash(password,10);
       const newVendor=new Vendor({
@@ -51,7 +51,7 @@ const vendorLogin = async (req, res) => {
         const vendorId = vendor._id.toString();
 
         return res.status(200).json({
-            success: "Login successful",
+            message: "Login successful",
             token,
             vendorId,
             vendorID: vendorId,
