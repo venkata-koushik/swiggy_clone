@@ -5,12 +5,30 @@ const vendorRoutes=require("./routes/vendorRoutes");
 const bodyParser=require("body-parser");
 const firmRoutes=require('./routes/firmRoutes');
 const productRoutes=require('./routes/productRoutes');
-const path = require("path");
 const cors=require("cors");
 
 dotenv.config();    
 const app=express();
-app.use(cors());
+
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://swiggy-clone-frontend-rmrevgmwh-venkata-koushiks-projects.vercel.app",
+];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        // Allow server-to-server/no-origin requests and local dev + deployed frontend
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error("Not allowed by CORS"));
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "token"],
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
 const PORT=process.env.PORT || 4000;
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{console.log("monogdb connected succesfull")})
