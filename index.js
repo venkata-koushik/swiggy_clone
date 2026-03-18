@@ -18,6 +18,7 @@ app.use(cors({
 }));
 
 const PORT=process.env.PORT || 4000;
+const HOST = "0.0.0.0";
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{console.log("monogdb connected succesfull")})
 .catch((error)=>{console.log(error)})
@@ -28,12 +29,14 @@ app.use('/product',productRoutes);
 app.use('/firm',firmRoutes);
 app.use('/uploads',express.static("uploads"));
 
- 
-app.use('/home',(req,res)=>{
-    console.log(process.env.MONGO_URI);
-     res.send("<h2>hello</h2>");
-})
+app.get("/",(req,res)=>{
+    res.status(200).json({message:"API is running"});
+});
 
-app.listen(PORT,()=>{
+app.get("/health",(req,res)=>{
+    res.status(200).json({status:"ok"});
+});
+
+app.listen(PORT, HOST, ()=>{
     console.log(`this is running in the ${PORT}`)
 })
