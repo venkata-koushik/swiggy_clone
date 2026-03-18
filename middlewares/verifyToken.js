@@ -5,7 +5,11 @@ const dotenv=require('dotenv');
 dotenv.config();
 const secretKey=process.env.JWT_SECRET;
 const verifyToken = async(req,res,next)=> {
-    const token =req.headers.token;
+    const bearerHeader = req.headers.authorization;
+    const tokenFromBearer = bearerHeader && bearerHeader.startsWith('Bearer ')
+        ? bearerHeader.split(' ')[1]
+        : null;
+    const token = tokenFromBearer || req.headers.token;
 
     if(!token){
         return res.status(401).json({error:"token is reqired"});
@@ -23,7 +27,10 @@ const verifyToken = async(req,res,next)=> {
         next()
     }catch(error){
              console.error(error);
-             return res.status(500).json({error:"invalid token"});
+             if (error.name === "TokenExpiredError") {
+                return res.status(401).json({ error: "token expired, please login again" });
+             }
+             return res.status(401).json({error:"invalid token"});
     }
 }
 

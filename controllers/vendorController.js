@@ -43,7 +43,7 @@ const vendorLogin = async (req, res) => {
         const token = jwt.sign(
             { vendorId: vendor._id },
            secretKey,
-            { expiresIn: "1h" }
+            { expiresIn: "7d" }
         );
 
         console.log("Login successful");
