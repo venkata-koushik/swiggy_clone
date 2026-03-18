@@ -36,16 +36,10 @@ const vendorLogin = async (req, res) => {
     try {
         const vendor = await Vendor.findOne({ email });
 
-        if (!vendor) {
-            return res.status(401).json({ error: "Invalid credentials" });
+        if (!vendor || !(await bcrypt.compare(password,vendor.password))) {
+            return res.status(401).json({ error: "Invalid username or password" });
         }
-
-        const isMatch = await bcrypt.compare(password, vendor.password);
-
-        if (!isMatch) {
-            return res.status(401).json({ error: "Invalid credentials" });
-        }
-
+     
         const token = jwt.sign(
             { vendorId: vendor._id },
            secretKey,
@@ -54,9 +48,14 @@ const vendorLogin = async (req, res) => {
 
         console.log("Login successful");
 
+        const vendorId = vendor._id.toString();
+
         return res.status(200).json({
             success: "Login successful",
-            token
+            token,
+            vendorId,
+            vendorID: vendorId,
+            id: vendorId,
         });
 
     } catch (error) {
@@ -82,7 +81,9 @@ const getVendorById = async(req,res)=>{
      if(!vendor){
       return res.status(400).json({error:"vendor not found"});
      }
-     res.status(200).json({vendor})
+     const vendorFirmId = vendor.firm && vendor.firm.length > 0 ? vendor.firm[0]._id : null;
+     const vendorFirmName = vendor.firm && vendor.firm.length > 0 ? vendor.firm[0].firmName : null;
+     return res.status(200).json({vendorId,vendorFirmId,vendorFirmName});
    }catch(error){
               console.log("Login error:", error);
         return res.status(500).json({ error: "internal server error" });
