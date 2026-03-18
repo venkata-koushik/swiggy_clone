@@ -1,9 +1,10 @@
 const productControllers=require('../controllers/productController');
 const express=require("express");
+const verifyToken = require('../middlewares/verifyToken');
 
 const router=express.Router();
 
-router.post('/add-product/:firmId',productControllers.addProducts);
+router.post('/add-product/:firmId',verifyToken,productControllers.addProducts);
 
 
 

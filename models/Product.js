@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const productSchema=new mongoose.Schema({
         productName:{
                 type:String,
-                unqiue:true,
+                unique:true,
                 required:true
         },
         price:{
@@ -20,14 +20,14 @@ const productSchema=new mongoose.Schema({
             type:String
         },
         bestSeller:{
-            type:String
+            type:Boolean
         },
         description:{
             type:String
         },
         firm:[{
             type:mongoose.Schema.Types.ObjectId,
-            ref:'Frim'
+            ref:'Firm'
         }]
 
 });

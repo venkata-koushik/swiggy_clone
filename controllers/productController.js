@@ -2,14 +2,14 @@
 const Product=require("../models/Product");
 const Firm=require("../models/Firm");
 const multer=require('multer');
-
+const path = require('path');
 
 const storage=multer.diskStorage({
-    destination:function(req,res,cb){
+    destination:function(req,file,cb){
         cb(null,'uploads/');
     },
-    filename:function(req,res,cb){
-        cb(null,date,now()+path.extname(file.originalname));
+    filename:function(req,file,cb){
+        cb(null,Date.now()+path.extname(file.originalname));
     }
 });
 const upload=multer({storage:storage});
@@ -23,7 +23,7 @@ const addProduct =async(req,res)=>{
      const firm=await Firm.findById(firmId);
 
      if(!firm){
-        res.status(404).json({message:"firm not found"});
+        return res.status(404).json({message:"firm not found"});
      }
 
      const product=new Product({
@@ -68,10 +68,10 @@ const deleteProductById=async (req,res)=>{
 
         const deletedProduct=await Product.findByIdAndDelete(productId);
       if(!deletedProduct){
-        res.status(404).json({error:"the product u want to delte s not found"});
+        return res.status(404).json({error:"the product u want to delte s not found"});
 
       }
-      res.status(200).json({message:"the product u wnat to delete is deleted "});
+      return res.status(200).json({message:"the product u wnat to delete is deleted "});
 
        }catch(error){
               console.error(error);
