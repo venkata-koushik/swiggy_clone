@@ -27,7 +27,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 const PORT=process.env.PORT || 4000;
 mongoose.connect(process.env.MONGO_URI)
