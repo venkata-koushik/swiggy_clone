@@ -12,10 +12,25 @@ dotenv.config();
 const app=express();
 
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://swiggy-clone-frontend-rmrevgmwh-venkata-koushiks-projects.vercel.app",
-    ],
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            "http://localhost:5173",
+            "https://swiggy-clone-frontend-rmrevgmwh-venkata-koushiks-projects.vercel.app",
+            "https://swiggy-clone-frontend-three.vercel.app",
+        ];
+
+        // Allow server-to-server requests and local tools without origin.
+        if (!origin) return callback(null, true);
+
+        if (
+            allowedOrigins.includes(origin) ||
+            /\.vercel\.app$/.test(origin)
+        ) {
+            return callback(null, true);
+        }
+
+        return callback(new Error("Not allowed by CORS"));
+    },
 }));
 
 const PORT=process.env.PORT || 4000;
