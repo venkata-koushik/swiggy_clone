@@ -6,6 +6,7 @@ const bodyParser=require("body-parser");
 const firmRoutes=require('./routes/firmRoutes');
 const productRoutes=require('./routes/productRoutes');
 const cors=require("cors");
+const path = require('path');
 
 dotenv.config();    
 const app=express();
@@ -27,7 +28,7 @@ app.use(bodyParser.json());
 app.use('/vendor',vendorRoutes);
 app.use('/product',productRoutes);
 app.use('/firm',firmRoutes);
-app.use('/uploads',express.static("uploads"));
+app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 
 app.get("/",(req,res)=>{
     res.status(200).json({message:"API is running"});
